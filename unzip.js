@@ -137,7 +137,10 @@ ZipLocalFile.prototype.unzip = function() {
 		}
 		
 		if (this.isValid) {
-			this.imageString = "data:image/jpeg;base64," + Utils.encode64(this.fileData);
+			var bb = new BlobBuilder();
+			console.log(this.fileData.byteLength, this.fileData.byteOffset);
+			bb.append(this.fileData.buffer);
+			this.imageString = webkitURL.createObjectURL(bb.getBlob().slice(this.fileData.byteOffset, this.fileData.byteLength));
 			this.fileData = null;
 		}
 };
@@ -309,7 +312,7 @@ var unzip = function(arrayBuffer, bDebug) {
 		postMessage(progress);
 	}
 	else { // check for RAR
-		unrar(bstr, bDebug);
+		unrar(bstream, bDebug);
 	}
 	return progress;
 }
