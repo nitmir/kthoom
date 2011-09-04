@@ -134,9 +134,20 @@ function createURLFromArray(array) {
 onmessage = function(event) {
   gDebug = event.data.debug;
   var file = event.data.file;
+  
+  var h = new Uint8Array(file, 0, 10);
+  if(h[0] == 0x52 && h[1] == 0x61 && h[2] == 0x72 && h[3] == 0x21){ //Rar!
+    unrar(file, gDebug);
+  }else if(h[0] == 80 && h[1] == 75){ //PK (Zip)
+    unzip(file, gDebug);
+  }else if(h[0] == 117 && h[1] == 115 && h[2] == 116 && h[3] == 97 && h[4] == 114){ //ustar
+    untar(file, gDebug);
+  }
+
+
+/*
   var filename = event.data.filename;
   var extension = filename.split(".")[1];
-
   switch (extension) {
     case 'cbz':
       unzip(file, gDebug);
@@ -148,7 +159,6 @@ onmessage = function(event) {
       untar(file, gDebug);
       break;
   }
-/*
   var fr = new FileReader();
   fr.onload = function() {
     var result = fr.result;

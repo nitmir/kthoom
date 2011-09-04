@@ -233,9 +233,6 @@ var unzip = function(arrayBuffer, bDebug) {
 		progress.isDone = true;
 		postMessage(progress);
 	}
-	else { // check for RAR
-		unrar(arrayBuffer, bDebug);
-	}
 	return progress;
 }
 
